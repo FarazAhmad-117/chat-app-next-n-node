@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import classes from './page.module.css'
 import { useSocket } from '../context/SocketProvider';
 
@@ -8,6 +8,8 @@ import { useSocket } from '../context/SocketProvider';
 function page() {
   const {sendMessage} = useSocket();
   const [message ,setMessage] = useState('');
+
+
 
   return (
     <div className={classes['chat-wrap']}>
