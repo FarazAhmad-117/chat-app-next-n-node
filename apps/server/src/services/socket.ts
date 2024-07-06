@@ -1,12 +1,12 @@
 import { Server } from "socket.io";
 import { Redis } from "ioredis";
-
+import prismaClient from './prisma';
 
 const redisCreds = {
-    host:'redis-14018.c301.ap-south-1-1.ec2.redns.redis-cloud.com',
-    port:14018,
+    host:'redis-10540.c257.us-east-1-3.ec2.redns.redis-cloud.com',
+    port:10540,
     username:'default',
-    password:'FFZU9keedMiEGLNrRf1BONIrRKakhFkL'
+    password:'TFEtSlSu1uIC5NBxrpuLPbBPYufcOQxw'
 }
 
 
@@ -45,9 +45,15 @@ class SocketService{
             })
         })
         
-        sub.on('message',(channel,message)=>{
+        sub.on('message',async(channel,message)=>{
             if(channel === 'MESSAGES'){
-                io.emit('message',JSON.parse(message).message);
+                const parsedMessage =await JSON.parse(message).message
+                io.emit('message',parsedMessage);
+                await prismaClient.message.create({
+                    data:{
+                        text:parsedMessage
+                    }
+                })
             }
         })
     }
